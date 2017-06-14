@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="description" content=""/>
+  <meta name="author" content=""/>
+  <title>Image Search Engine</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css"/>
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css"/>
+  
+  <!-- Theme CSS -->
+  <style>
+    
+    html,
+    body {
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
+      font-family: 'Merriweather', 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    a {
+      -webkit-transition: all 0.35s;
+      -moz-transition: all 0.35s;
+      transition: all 0.35s;
+      color: #F05F40;
+    }
+
+    a:hover,
+    a:focus {
+      color: #eb3812;
+    }
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+      color: # !important
+    }
+
+    .no-padding {
+      padding: 2%;
+    }
+
+    .call-to-action h2 {
+      margin: 0 auto 20px;
+    }
+    .text-primary {
+      color: #F05F40;
+    }
+    .no-gutter > [class*='col-'] {
+      padding-right: 0;
+      padding-left: 0;
+    }
+    ::-moz-selection {
+      color: white;
+      text-shadow: none;
+      background: #222222;
+    }
+    ::selection {
+      color: white;
+      text-shadow: none;
+      background: #222222;
+    }
+    img::selection {
+      color: white;
+      background: transparent;
+    }
+    img::-moz-selection {
+      color: white;
+      background: transparent;
+    }
+    body {
+      webkit-tap-highlight-color: #222222;
+    }
+       
+    .navbar {
+      background-color: #404040;
+      padding-top: 15px;
+      padding-bottom: 15px;
+      border: 0;
+      border-radius: 0;
+      margin-bottom: 0;
+      font-size: 12px;
+      letter-spacing: 5px;
+    }
+    
+    .navbar-nav  li a:hover {
+      color: #1abc9c !important;
+    } 
+      
+    #custom-search-input {
+      padding: 2%;
+    }
+     
+    #custom-search-input .search-query {
+      padding-right: 3px;
+      padding-right: 4px \9;
+      padding-left: 3px;
+      padding-left: 4px \9;
+      /* IE7-8 doesn't have border-radius, so don't indent the padding */
+      margin-bottom: 0;
+      -webkit-border-radius: 3px;
+      -moz-border-radius: 3px;
+      border-radius: 3px;
+    }
+     
+    .custom-load-button{
+      padding-right: 3px;
+      padding-right: 4px \9;
+      padding-left: 3px;
+      padding-left: 4px \9;
+      /* IE7-8 doesn't have border-radius, so don't indent the padding */
+      margin-bottom: 0;
+      -webkit-border-radius: 3px;
+      -moz-border-radius: 3px;
+      border-radius: 3px;
+    }
+
+    #custom-search-input button {
+      border: 0;
+      background: none;
+      /** belows styles are working good */
+      padding: 2px 5px;
+      margin-top: 2px;
+      position: relative;
+      left: -28px;
+      /* IE7-8 doesn't have border-radius, so don't indent the padding */
+      margin-bottom: 0;
+      -webkit-border-radius: 3px;
+      -moz-border-radius: 3px;
+      border-radius: 3px;
+      color:#404040;
+    }
+     
+    .search-query:focus + button {
+      z-index: 3;   
+    }
+        
+    .bg-grey {
+      background-color: #f6f6f6;
+    }
+    
+    .gallery{
+      margin: 0;
+      padding: 2%;
+      height: 100%;
+    }
+
+    [class*='thumbnail-']{
+      background: white;
+      width: 33.33%;
+      height: 400px;
+      float: left;
+      padding: 5px 5px 3px 5px;
+      cursor: zoom-in;
+    }
+
+    [class*='thumbnail-'] img{
+      max-width: 100%;
+    }
+
+    [class*='large-']{
+      background:white;
+      width: 33.33%;
+      margin: 0 auto;
+      padding: 30px;
+      display: none;
+    }
+
+    [class*='large-'] img{
+      width: 33.33%;
+      max-width: auto;
+      margin: 0 auto;
+    }
+
+    .prev{
+      color: #fff;
+      font-size: 60px;
+      position: absolute;
+      top: 45%;
+      left: 10px;
+      float: left;
+    }
+
+    .next{
+      color: #fff;
+      font-size: 60px;
+      position: absolute;
+      top: 45%;
+      right: 10px;
+      float: right;
+    }
+
+    .close{
+      color: #fff;
+      font-size: 30px;
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      float: right;
+      cursor: zoom-out;
+    }
+
+    [class*='thumbnail-']{
+      overflow: hidden;
+      padding: 0;
+      position: relative;
+      cursor: zoom-in;
+    }
+
+    [class*='thumbnail-']:hover img{
+      transition: .3s linear;
+      transition-delay: 300ms;
+      transform: /* rotate(5deg) */ scale(1.4);
+    }
+
+    [class*='thumbnail-'] > .caption{
+      display: none;
+      position: absolute;
+      bottom: 0;
+      padding: 15px;
+      width: auto;
+      background-color: black;
+      color: white;
+      opacity: 0.8;
+    }
+
+    [class*='thumbnail-']:hover > .caption{
+      display: block;
+    }
+
+    @media screen and (max-width:480px){
+      .caption h3{
+        font-size: 12px;
+      }
+      .group {
+        display: none;
+      }
+      [class*='thumbnail-']{
+        background: white;
+        width: auto;
+        height: auto;
+        float: left;
+        padding: 5px 5px 3px 5px;
+        cursor: zoom-in;
+      }
+      [class*='large-']{
+        background: white;
+        width: auto;
+        margin: 0 auto;
+        padding: 30px;
+        display: none;
+      }
+      [class*='large-'] img{
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+      }
+    } 
+
+    .group {
+      display: inline-block;
+    }
+
+    .none{
+       display: none;
+    }
+
+    .loadButtonDiv {
+      position: relative;
+      bottom:1%;
+      right:0;
+    }
+
+    .loadButton{
+      width:100%;
+      background-color: #404040;
+      color:#777;
+    }
+
+    .loadButton:hover{
+      background-color: #737373;
+    }
+
+    #loader-container {
+      width: 200px;
+      height: 200px;
+      color: white;
+      margin: 0 auto;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-right: -50%;
+      transform: translate(-50%, -50%);
+      border: 5px solid #606060;
+      border-radius: 50%;
+      -webkit-animation: borderScale 1s infinite ease-in-out;
+      animation: borderScale 1s infinite ease-in-out;
+    }
+
+    #loadingText {
+      font-family: 'Raleway', sans-serif;
+      font-weight: bold;
+      font-size: 2em;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-right: -50%;
+      transform: translate(-50%, -50%);
+      color:#606060;
+    }
+
+    @-webkit-keyframes borderScale {
+      0% {
+        border: 5px solid white;
+      }
+      50% {
+        border: 25px solid #606060;
+      }
+      100% {
+        border: 5px solid white;
+      }
+    }
+
+    @keyframes borderScale {
+      0% {
+        border: 5px solid white;
+      }
+      50% {
+        border: 25px solid #606060;
+      }
+      100% {
+        border: 5px solid white;
+      }
+    }
+  </style>
+</head>
+
+<body ng-app="imageApp" ng-controller="imageController">
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#" >Image Search</a>
+      </div>
+     
+    </div>
+  </nav>
+         
+  <div id="custom-search-input">
+    <div class="input-group col-md-12">
+      <input type="text" class="search-query form-control" placeholder="Search" ng-model="inputText" ng-enter="searchResults()"/>
+      <span class="input-group-btn">
+        <button class="btn btn-danger" type="button"  ng-click="searchResults()">
+          <span class=" glyphicon glyphicon-search"></span>
+        </button>
+      </span>
+    </div>
+  </div>
+
+  <div>
+    <div id="loader-container" ng-if="loader">
+      <p id="loadingText">Seaching</p>
+    </div>
+  <div class="row text-left" ng-if="displaySearchLength">
+    <div class="col-xs-12 text-left">            
+      <h4><strong><strong style="color:#666666">{{imageList.length}}</strong> images found!</strong></h4>
+    </div>
+  </div>
+
+  <div class="gallery" ng-if="showSearchResults">
+    <div class="thumbnail-{{image.id}} wow fadeInLeft group" ng-repeat="image in imageList | limitTo:totalDisplayed">
+      <img src="{{image.imageURL}}" on-error="http://www.equipsellsit.com/assets/images/no-image.jpg"/><!-- [Vijay]:IF there are image loaded issues, NO-IMAGE-FOUND will be displayed -->
+        <div class="caption">
+          <h3 class="wow fadeInUp">{{image.caption}}</h3>
+        </div>  
+    </div>
+    <div class="large-{{image.id}} wow bounceInLeft">
+      <img src="{{image.imageURL}}" on-error="http://www.equipsellsit.com/assets/images/no-image.jpg"/>
+        <span class="close">✕</span>
+    </div> 
+  </div> 
+
+  <div class="col-xs-12 loadButtonDiv" ng-if="showLoadMoreButton">
+    <button class="btn btn-default loadButton" ng-Mouseover="loadMore()">Load More Images</button><!--[Vijay]:   -->
+  </div>                
+
+  <div class="row text-left" ng-if="displayErrorMessage">
+    <div class="col-xs-12 text-left">            
+      <h4><strong>Sorry, no images found</strong></h4>
+    </div>
+  </div>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+  <script>
+    var app = angular.module("imageApp", []); 
+    
+    app.directive('ngEnter', function () { //a directive to 'enter key press' in elements with the "ng-enter" attribute
+      return function (scope, element, attrs) {
+        element.bind("keydown keypress", function (event) {
+          if (event.which === 13) {
+            scope.$apply(function () {
+            scope.$eval(attrs.ngEnter);
+            });
+            event.preventDefault();
+          }
+        });
+      };
+    })
+     
+    app.directive('onError', function() {
+      return {
+        restrict:'A',
+        link: function(scope, element, attr) {
+          element.on('error', function() {
+          element.attr('src', attr.onError);
+          });
+        }
+      };
+    });
+
+    app.controller("imageController", function($scope,$http) {
+      $scope.displayErrorMessage = false;
+      $scope.showSearchResults = false;
+      $scope.displaySearchLength = false;
+      $scope.showLoadMoreButton = false;
+      $scope.loader = false;
+      var urlInput = "";
+      $scope.totalDisplayed = 50;//[Vijay]:Image Display is set to 50
+
+      $scope.clear = function(){
+        $scope.inputText = "";
+        $scope.displayErrorMessage = false;
+        $scope.showSearchResults = false;
+        $scope.displaySearchLength =false;
+        $scope.showLoadMoreButton = false;
+        $scope.loader = false;
+      };
+      
+      $scope.$watch('inputText', function() {
+        if($scope.inputText == null || $scope.inputText == ""){
+          $scope.displayErrorMessage = false;
+          $scope.showSearchResults = false;
+          $scope.displaySearchLength =false;
+          $scope.showLoadMoreButton = false;
+          $scope.loader = false;
+        }
+        else{
+          $scope.displayErrorMessage = false;
+          $scope.showSearchResults = false;
+          $scope.displaySearchLength =false;
+          $scope.showLoadMoreButton = false;
+          $scope.searchResults();
+        }
+      });
+      
+      $scope.searchResults = function(){
+        $scope.loader = true;
+        if($scope.inputText == null || $scope.inputText == ""){
+          urlInput = "/api/image/"
+        }
+        else{
+          urlInput = "/api/image/"+$scope.inputText;
+        }
+
+        $http({
+          method : "GET",
+          url    : urlInput
+        }).then(function mySuccess(response) {
+              $scope.imageList = response.data;
+              $scope.displayErrorMessage = false;
+              $scope.showSearchResults = true;
+              $scope.displaySearchLength =true;
+              if(response.data.length > 50){//[Vijay]: Load only 50 Images and Show More buttom so user can click and load further images
+                $scope.showLoadMoreButton = true;
+              }
+              $scope.loader = false;
+              $scope.loadMore = function () {
+               $scope.totalDisplayed += 50;  
+              };
+          },function myError(response) {
+              $scope.displayErrorMessage = true;
+              $scope.showSearchResults = false;
+              $scope.displaySearchLength =false;
+              $scope.showLoadMoreButton = false;
+              $scope.errorMessage = response.data.errorMessage;
+              $scope.loader = false;
+          });
+        };       
+    });
+  </script>
+</body>
+</html>
